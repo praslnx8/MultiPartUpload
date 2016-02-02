@@ -5,5 +5,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="get_latest_images_api">http://www.prasilabs.com/image_upload/get_images</string>
+    <string name="get_latest_images_api">http://www.prasilabs.com/image_upload/get_images.php</string>
+    <!--<string name="upload_image_api">http://www.prasilabs.com/image_upload/upload_image.php</string>-->
+    <string name="upload_image_api">http://192.168.0.5:8080/upload.php</string>
 </resources>

@@ -118,9 +118,10 @@ public class CommonUtil
         }
         else
         {
-            AsyncTaskFileUpload.uploadImage(pictureFile, pictureName, new AsyncTaskFileUpload.AsyncImageUploadCallBack() {
+            AsyncTaskFileUpload.uploadImage(context, pictureFile, pictureName, new AsyncTaskFileUpload.AsyncImageUploadCallBack() {
                 @Override
-                public void uploaded(boolean status, String message) {
+                public void uploaded(boolean status, String message)
+                {
 
                 }
             });

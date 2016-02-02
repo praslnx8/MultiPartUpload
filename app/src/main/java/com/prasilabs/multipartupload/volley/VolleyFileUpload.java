@@ -10,6 +10,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.prasilabs.multipartupload.R;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -76,7 +77,7 @@ public class VolleyFileUpload
                     e.printStackTrace();
                 }
 
-                String url = "http://192.168.1.23:8080/upload.php";
+                String url = context.getString(R.string.upload_image_api);
                 MultiPartRequest multipartRequest = new MultiPartRequest(url, null, mimeType, multipartBody, new Response.Listener<NetworkResponse>() {
                     @Override
                     public void onResponse(NetworkResponse response)
@@ -88,10 +89,13 @@ public class VolleyFileUpload
                     }
                 }, new Response.ErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, "Upload failed!\r\n" + error.toString(), Toast.LENGTH_LONG).show();
-                        Log.d("Response", error.getMessage());
-                        error.printStackTrace();
+                    public void onErrorResponse(VolleyError error)
+                    {
+                        if(error != null && !TextUtils.isEmpty(error.getMessage())) {
+                            Toast.makeText(context, "Upload failed!\r\n" + error.getMessage(), Toast.LENGTH_LONG).show();
+                            Log.d("Response", error.getMessage());
+                            error.printStackTrace();
+                        }
 
                     }
                 });

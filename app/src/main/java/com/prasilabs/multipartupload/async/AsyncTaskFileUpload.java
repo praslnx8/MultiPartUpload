@@ -1,7 +1,10 @@
 package com.prasilabs.multipartupload.async;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.prasilabs.multipartupload.R;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -16,21 +19,23 @@ import java.net.URL;
 public class AsyncTaskFileUpload extends AsyncTask<String, String, String>
 {
 
-    private String upLoadServerUri = "http://192.168.1.150:8080/UploadToServer.php";
-
     private File file;
     private String fileName;
+    private Context context;
     private AsyncImageUploadCallBack listener;
 
-    public static void uploadImage(File file, String fileName, AsyncImageUploadCallBack asyncImageUploadCallBack)
+    public static void uploadImage(Context context, File file, String fileName, AsyncImageUploadCallBack asyncImageUploadCallBack)
     {
-        AsyncTaskFileUpload asyncTaskFileUpload = new AsyncTaskFileUpload(asyncImageUploadCallBack);
+        AsyncTaskFileUpload asyncTaskFileUpload = new AsyncTaskFileUpload(context, asyncImageUploadCallBack);
         asyncTaskFileUpload.file = file;
         asyncTaskFileUpload.fileName = fileName;
+
+        asyncTaskFileUpload.execute();
     }
 
-    public AsyncTaskFileUpload (AsyncImageUploadCallBack listener){
+    public AsyncTaskFileUpload (Context context, AsyncImageUploadCallBack listener){
         this.listener=listener;
+        this.context = context;
     }
 
 
@@ -43,7 +48,8 @@ public class AsyncTaskFileUpload extends AsyncTask<String, String, String>
     }
 
     public long uploadFile()
-    {   long actuaStartlTime = 0 ;
+    {
+        long actuaStartlTime = 0 ;
         double debutPaquet ;
         double[] tabTotalDebit= new double [10];
         long TotalSize=0;
@@ -65,7 +71,7 @@ public class AsyncTaskFileUpload extends AsyncTask<String, String, String>
             try
             {
                 FileInputStream fis = new FileInputStream(file);
-                URL url = new URL(upLoadServerUri);
+                URL url = new URL(context.getString(R.string.upload_image_api));
 
                 comm = (HttpURLConnection)url.openConnection();
                 comm.setDoInput(true);
@@ -132,8 +138,10 @@ public class AsyncTaskFileUpload extends AsyncTask<String, String, String>
     }
     protected void onProgressUpdate(String... progress) {
     }
-    protected void onPostExecute(String reslut) {
+    protected void onPostExecute(String reslut)
+    {
         Log.i("msg","Upload comlete. \n\n See Upload file here : : /var/www/uploads ");
+        listener.uploaded(true, reslut);
     }
 
     public interface AsyncImageUploadCallBack
