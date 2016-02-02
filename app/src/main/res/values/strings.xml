@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MultiPartUpload</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="get_latest_images_api">http://www.prasilabs.com/image_upload/get_images</string>
+</resources>
