@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -22,6 +23,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class ApiCall
 {
+    private static final String TAG = ApiCall.class.getSimpleName();
+
     public static void callApi(Context context, int urlResourceId, final ArrayMap<String, Object> mParams, final ApiCallBack apiCallBack)
     {
         InternalVolleySingleton volleySingleton = InternalVolleySingleton.getInstance();
@@ -36,6 +39,7 @@ public class ApiCall
             @Override
             public void onResponse(String response)
             {
+                Log.d(TAG, "response is: " + response);
                 if(apiCallBack != null)
                 {
                     ApiResponse apiResponse = new ApiResponse();

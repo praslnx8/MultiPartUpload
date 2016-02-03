@@ -43,6 +43,9 @@ public class HomePagerAdapter extends FragmentPagerAdapter
         }
         return 1f;*/
 
-        return 0.9f;
+        if(position == 1) {
+            return 0.84f;
+        }
+        return 1f;
     }
 }

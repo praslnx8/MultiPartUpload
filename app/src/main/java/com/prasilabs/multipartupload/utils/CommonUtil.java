@@ -9,8 +9,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.LocalBroadcastManager;
 
+import com.prasilabs.multipartupload.R;
 import com.prasilabs.multipartupload.async.AsyncTaskFileUpload;
+import com.prasilabs.multipartupload.constants.Constants;
 import com.prasilabs.multipartupload.constants.RequestFor;
 import com.prasilabs.multipartupload.volley.VolleyFileUpload;
 
@@ -23,7 +26,7 @@ import java.util.List;
  */
 public class CommonUtil
 {
-    private static  final int TAKE_PHOTO_CODE = 123;
+    public static  final int TAKE_PHOTO_CODE = 123;
 
     public static File getTempFile(Context context)
     {
@@ -73,58 +76,12 @@ public class CommonUtil
         builder.show();
     }
 
-    public static void handleActivityResult(Context context, int requestCode, Intent data, int uploadType)
+    public static String constructImageUrl(Context context, String url)
     {
-        String picturePath = "";
-        String pictureName = "";
+        String baseImageUrl = context.getString(R.string.base_url);
 
-        File pictureFile = null;
-
-        if (requestCode == 1)
-        {
-            Uri selectedImage = data.getData();
-            String[] filePath = {MediaStore.Images.Media.DATA};
-            Cursor c = context.getContentResolver().query(selectedImage, filePath, null, null, null);
-            if(c != null && c.getCount() > 0)
-            {
-                c.moveToFirst();
-                int columnIndex = c.getColumnIndex(filePath[0]);
-                picturePath = c.getString(columnIndex);
-                c.close();
-
-                List<String> items = Arrays.asList(picturePath.split("/"));
-                pictureName = items.get(items.size() - 1);
-
-                pictureFile = new File(picturePath);
-            }
-        }
-        else if (requestCode == TAKE_PHOTO_CODE)
-        {
-            pictureFile = CommonUtil.getTempFile(context);
-
-            pictureName = pictureFile.getName();
-        }
-
-
-        if(uploadType == RequestFor.VOLLEY_UPLOAD_REQUEST)
-        {
-            VolleyFileUpload.uploadVolleyImage(context, pictureFile, pictureName, new VolleyFileUpload.VolleyImageUploadCallBack() {
-                @Override
-                public void uploaded(boolean status, String message)
-                {
-
-                }
-            });
-        }
-        else
-        {
-            AsyncTaskFileUpload.uploadImage(context, pictureFile, pictureName, new AsyncTaskFileUpload.AsyncImageUploadCallBack() {
-                @Override
-                public void uploaded(boolean status, String message)
-                {
-
-                }
-            });
-        }
+        return baseImageUrl + url;
     }
+
+
 }

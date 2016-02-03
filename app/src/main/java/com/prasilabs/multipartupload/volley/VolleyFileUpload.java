@@ -40,7 +40,7 @@ public class VolleyFileUpload
 
     private VolleyImageUploadCallBack volleyImageUploadCallBack;
 
-    private void uploadImage(final Context context, File pictureFile, String pictureName, VolleyImageUploadCallBack volleyImageUploadCallBack)
+    private void uploadImage(final Context context, File pictureFile, String pictureName, final VolleyImageUploadCallBack volleyImageUploadCallBack)
     {
         this.volleyImageUploadCallBack = volleyImageUploadCallBack;
 
@@ -83,9 +83,8 @@ public class VolleyFileUpload
                     public void onResponse(NetworkResponse response)
                     {
                         String stringResponse = new String(response.data);
-                        Toast.makeText(context, "Upload successfully! : " + stringResponse, Toast.LENGTH_LONG).show();
-                        Log.d("Response", stringResponse);
-                        Log.d("Response", "status: " + response.statusCode + " : " + response);
+
+                        volleyImageUploadCallBack.uploaded(true, stringResponse);
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -97,6 +96,7 @@ public class VolleyFileUpload
                             error.printStackTrace();
                         }
 
+                        volleyImageUploadCallBack.uploaded(false, null);
                     }
                 });
 

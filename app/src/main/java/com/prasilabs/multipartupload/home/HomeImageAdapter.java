@@ -1,6 +1,8 @@
 package com.prasilabs.multipartupload.home;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.prasilabs.multipartupload.R;
 import com.prasilabs.multipartupload.network.InternalVolleySingleton;
 import com.prasilabs.multipartupload.pojo.ImagePojo;
+import com.prasilabs.multipartupload.utils.CommonUtil;
 
 import java.util.ArrayList;
 
@@ -64,11 +67,20 @@ public class HomeImageAdapter extends BaseAdapter
             mViewHolder = (ImageViewHolder) convertView.getTag();
         }
 
-        ImagePojo imagePojo = getItem(position);
+        final ImagePojo imagePojo = getItem(position);
 
-        InternalVolleySingleton.loadImage(mViewHolder.imageView, imagePojo.getImageUrl());
+        InternalVolleySingleton.loadImage(mViewHolder.imageView, CommonUtil.constructImageUrl(context, imagePojo.getImageUrl()));
         mViewHolder.descView.setText(imagePojo.getDesc());
         mViewHolder.dateView.setText(imagePojo.getDate());
+        mViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = CommonUtil.constructImageUrl(context, imagePojo.getImageUrl());
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                context.startActivity(i);
+            }
+        });
 
         return convertView;
     }
